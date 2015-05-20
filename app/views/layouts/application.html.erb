@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Blocipedia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <%= link_to "Blocipedia", welcome_index_path, class: "navbar-brand"  %>
+        </div>
+
+        
+          <% if current_user %>
+            <%= link_to "My Lists", user_path(current_user), class: "navbar-text" %>
+            <form class="navbar-form navbar-right login-blurb">
+              <%= gravatar_for current_user %>
+              Hello, <%= link_to current_user.username, current_user, class: "removeLinkFormat" %>!
+              <%= link_to "Sign out", destroy_user_session_path, method: :delete, class: "btn btn-primary" %>
+            </form>
+
+          <% else %>
+            <%= form_for(:user, url: session_path(:user), html: {class: "navbar-form navbar-right"}) do |f| %>
+               <div class="form-group">
+                <%= f.email_field :email, class: 'form-control', placeholder: "Email" %>
+              </div>
+              <div class="form-group">
+                <%= f.password_field :password, class: 'form-control', placeholder: "Password" %>
+              </div>
+              <%= f.submit "Sign in", class: 'btn btn-success' %>
+            <% end %>
+          <% end %>
+        
+        </div>
+      </nav>
+
+
+      <% if flash[:notice] %>
+       <div class="alert alert-success flash-notice">
+         <button type="button" class="close" data-dismiss="alert">&times;</button>
+         <%= flash[:notice] %>
+       </div>
+      <% elsif flash[:error] %>
+       <div class="alert alert-danger flash-notice">
+         <button type="button" class="close" data-dismiss="alert">&times;</button>
+         <%= flash[:error] %>
+       </div>
+      <% elsif flash[:alert] %>
+       <div class="alert alert-warning flash-notice">
+         <button type="button" class="close" data-dismiss="alert">&times;</button>
+         <%= flash[:alert] %>
+       </div>
+      <% end %>
+
+      <div class='container'>
+        <%= yield %>
+      </div>
+
+
+<div class="container">
+  <hr>
+  <footer>
+    <p>© Brock Cooper and Bloc.io 2015</p>
+  </footer>
+</div> <!-- /container -->
+
+</body>
+<%= javascript_include_tag "application" %>
+</html>
